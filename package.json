@@ -2,12 +2,17 @@
   "name": "libbuk",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "dockers:dev": "docker-compose -f tools/environment/dev.docker-compose.yml up -d --no-recreate --remove-orphans",
+    "db:migrate:dev": "npx env-cmd -f .local.env npx prisma migrate dev",
+    "db:studio": "npx env-cmd -f .local.env npx prisma studio"
+  },
   "private": true,
   "dependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@prisma/client": "^4.12.0",
     "axios": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.0",
@@ -28,12 +33,14 @@
     "@types/node": "~18.7.1",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
+    "env-cmd": "^10.1.0",
     "eslint": "~8.15.0",
     "eslint-config-prettier": "8.1.0",
     "jest": "^29.4.1",
     "jest-environment-node": "^29.4.1",
     "nx": "15.9.2",
     "prettier": "^2.6.2",
+    "prisma": "^4.12.0",
     "ts-jest": "^29.0.5",
     "ts-node": "10.9.1",
     "typescript": "~4.9.5"
