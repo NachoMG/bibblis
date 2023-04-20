@@ -1,13 +1,59 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+generator client {
+  provider = "prisma-client-js"
+}
+
 model User {
-  id    String @id @default(uuid())
-  email String @unique
+  id                String             @id @default(uuid())
+  email             String             @unique @db.VarChar(255)
+  password          String             @db.VarChar(255)
+  salt              String
+  lang              String             @db.Char(2)
+  firstName         String             @db.VarChar(100)
+  lastName          String             @db.VarChar(100)
+  birthDate         DateTime
+  validated         Boolean            @default(false)
+  active            Boolean            @default(true)
+  acceptedMarketing Boolean
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  refreshTokens     RefreshToken[]
+  emailVerification EmailVerification?
+  passwordResets    PasswordReset[]
+}
+
+model RefreshToken {
+  id          Int      @id @default(autoincrement())
+  userId      String
+  jti         String   @unique
+  hashedToken String   @unique
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model EmailVerification {
+  id          Int       @id @default(autoincrement())
+  userId      String    @unique
+  hashedToken String    @unique
+  sentAt      DateTime
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id])
+}
+
+model PasswordReset {
+  id          Int       @id @default(autoincrement())
+  userId      String    @unique
+  hashedToken String    @unique
+  sentAt      DateTime
+  completedAt DateTime?
+  expiresAt   DateTime
+  createdAt   DateTime  @default(now())
+  active      Boolean   @default(true)
+  user        User      @relation(fields: [userId], references: [id])
 }
