@@ -9,8 +9,10 @@ import { JwtEmailVerificationGuard } from './guards/jwt-email-verification.guard
 import { JwtPasswordResetGuard } from './guards/jwt-password-reset.guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { SignUpDto } from './dto/sign-up.dto';
+import { SignInDto } from './dto/sign-in.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { IRequestWithRefreshTokenPayload } from './interfaces/i-request-with-refresh-token-payload';
+
 
 @Controller('auth')
 export class AuthController {
@@ -38,9 +40,9 @@ export class AuthController {
   @HttpCode(200)
   async signIn(
     @Res({ passthrough: true }) res: Response,
-    @Body() signUpDto: SignUpDto
+    @Body() signInDto: SignInDto
   ) {
-    const { access_token, refresh_token } = await this.authService.signIn(signUpDto);
+    const { access_token, refresh_token } = await this.authService.signIn(signInDto);
     res.cookie('refresh', refresh_token, { httpOnly: true });
     return { access_token };
   }
