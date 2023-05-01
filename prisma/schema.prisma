@@ -57,3 +57,67 @@ model PasswordReset {
   active      Boolean   @default(true)
   user        User      @relation(fields: [userId], references: [id])
 }
+
+model Author {
+  id        String        @id @default(uuid())
+  olid      String        @unique
+  name      String
+  bio       String?
+  birthDate String?
+  works     Work[]
+  aliases   AuthorAlias[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model AuthorAlias {
+  id       Int    @id @default(autoincrement())
+  authorId String
+  alias    String
+  Author   Author @relation(fields: [authorId], references: [id])
+}
+
+model Work {
+  id          String   @id @default(uuid())
+  olid        String   @unique
+  title       String
+  description String?
+  books       Book[]
+  authors     Author[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Book {
+  id          String           @id @default(uuid())
+  title       String
+  publisher   String?
+  publishedAt String?
+  description String?
+  cover       String?
+  pages       Int?
+  workId      String
+  identifiers BookIdentifier[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  work        Work             @relation(fields: [workId], references: [id])
+}
+
+model BookIdentifier {
+  id               Int                @id @default(autoincrement())
+  value            String
+  identifierTypeId Int
+  bookId           String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  type             BookIdentifierType @relation(fields: [identifierTypeId], references: [id])
+  book             Book               @relation(fields: [bookId], references: [id])
+
+  @@unique([bookId, identifierTypeId, value])
+}
+
+model BookIdentifierType {
+  id             Int              @id @default(autoincrement())
+  name           String           @unique
+  BookIdentifier BookIdentifier[]
+}

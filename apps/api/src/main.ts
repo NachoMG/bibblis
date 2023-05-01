@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
@@ -14,6 +14,7 @@ async function bootstrap() {
   app.setGlobalPrefix(globalPrefix);
   app.disable('x-powered-by');
   app.use(cookieParser());
+  app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
     .addCookieAuth('refresh')
