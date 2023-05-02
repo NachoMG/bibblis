@@ -1,0 +1,52 @@
+name: Build and push to ECR
+on:
+  push:
+    branches: [main]
+jobs:
+  print-affected:
+    runs-on: ubuntu-latest
+    outputs:
+      affected_apps: ${{ steps.print-affected.outputs.affected_apps }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v3
+      - name: Install NPM dependencies
+        run: npm ci
+      - name: Print affected apps
+        id: print-affected
+        run: echo "::set-output name=affected_apps::$(nx print-affected -t build --select=projects)"
+  api-build-and-push-to-ecr:
+    runs-on: ubuntu-latest
+    needs: print-affected
+    if: ${{ contains(steps.print-affected.outputs.affected_apps, 'api') }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.API_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.API_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Login to Amazon ECR Private
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Install NPM dependencies
+        run: npm ci
+      - name: Build project
+        run: nx build api
+      - name: Build Docker image
+        run: |
+          docker build -f apps/api/Dockerfile . -t ${{ secrets.API_ECR_REGISTRY }}/${{ secrets.API_ECR_REPOSITORY }}:${{ github.sha }}
+          docker tag ${{ secrets.API_ECR_REGISTRY }}/${{ secrets.API_ECR_REPOSITORY }}:${{ github.sha }} ${{ secrets.ECR_REGISTRY }}/${{ secrets.API_ECR_REPOSITORY }}:latest
+      - name: Push Docker image to Amazon ECR
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.API_ECR_REGISTRY }}/${{ secrets.API_ECR_REPOSITORY }}:${{ github.sha }}, ${{ secrets.API_ECR_REGISTRY }}/${{ secrets.API_ECR_REPOSITORY }}:latest
+          registry: ${{ steps.login-ecr.outputs.registry }}
