@@ -2,7 +2,7 @@ FROM node:18-alpine as deps
 
 WORKDIR /user/src/app
 
-COPY dist/apps/api/package*.json .
+COPY dist/apps/api/package*.json ./
 COPY prisma ./prisma/
 
 RUN npm ci --omit=dev
@@ -14,7 +14,7 @@ WORKDIR /user/src/app
 
 COPY --from=deps /user/src/app/node_modules ./node_modules
 COPY --from=deps /user/src/app/package*.json ./
-COPY dist/apps/api .
+COPY dist/apps/api ./
 
 USER node
 
