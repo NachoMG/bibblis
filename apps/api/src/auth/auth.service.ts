@@ -92,13 +92,11 @@ export class AuthService {
       );
     }
 
-    const salt = Crypto.randomBytes(16).toString('base64');
-    const hashedPassword = await this.hash(`${signUpDto.password}${salt}`);
+    const hashedPassword = await this.hash(signUpDto.password);
 
     const newUserData: Prisma.UserCreateInput = {
       email: signUpDto.email,
       password: hashedPassword,
-      salt,
       lang: signUpDto.lang,
       firstName: signUpDto.firstName,
       lastName: signUpDto.lastName,
@@ -122,8 +120,7 @@ export class AuthService {
       throw new UnauthorizedException('Incorrect email or password');
     }
 
-    const candidatePassword = `${signInDto.password}${user.salt}`;
-    const isSamePassword = await bcrypt.compare(candidatePassword, user.password);
+    const isSamePassword = await bcrypt.compare(signInDto.password, user.password);
     if (!isSamePassword) {
       throw new UnauthorizedException('Incorrect email or password');
     }
