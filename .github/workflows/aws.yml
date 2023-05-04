@@ -69,5 +69,5 @@ jobs:
         run: npx nx build api
       - name: Build Docker image
         run: |
-          docker build -f apps/api/Dockerfile . -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.API_ECR_REPOSITORY }}:latest
-          docker push ${{ secrets.ECR_REGISTRY }}/${{ secrets.API_ECR_REPOSITORY }}:latest
+          docker build -f apps/api/Dockerfile . -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.WEB_ECR_REPOSITORY }}:latest
+          docker push ${{ secrets.ECR_REGISTRY }}/${{ secrets.WEB_ECR_REPOSITORY }}:latest
