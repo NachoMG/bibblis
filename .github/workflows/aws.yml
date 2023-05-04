@@ -66,8 +66,8 @@ jobs:
       - name: Install NPM dependencies
         run: npm ci
       - name: Build project
-        run: npx nx build api
+        run: npx nx build web
       - name: Build Docker image
         run: |
-          docker build -f apps/api/Dockerfile . -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.WEB_ECR_REPOSITORY }}:latest
+          docker build -f apps/web/Dockerfile . -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.WEB_ECR_REPOSITORY }}:latest
           docker push ${{ secrets.ECR_REGISTRY }}/${{ secrets.WEB_ECR_REPOSITORY }}:latest
