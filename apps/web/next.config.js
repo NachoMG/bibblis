@@ -13,6 +13,16 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'covers.openlibrary.org',
+        port: '',
+        pathname: '/b/id/**',
+      },
+    ],
+  },
   output: 'standalone',
   experimental: {
     outputFileTracingRoot: path.join(__dirname, "../../")

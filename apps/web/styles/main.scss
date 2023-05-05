@@ -1,4 +1,31 @@
+// Bootstrap override
+
+$primary: #3F88C5;
+$secondary: #2A2D34;
+$tertiary: #8DC63F;
+
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+
+$custom-colors: (
+  "tertiary": $tertiary
+);
+
+$theme-colors: map-merge($theme-colors, $custom-colors);
+
 @import 'bootstrap/scss/bootstrap.scss';
 
-@import 'index';
+// Variables
+
+@import 'variables.scss';
+
+// Default styles
+
+body {
+    background-color: $main-background-color;
+}
+
+// Components
+
+@import 'isbn-search-box.scss';
 

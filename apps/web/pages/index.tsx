@@ -1,9 +1,11 @@
-export function Index() {
+import MainLayout from '../layouts/MainLayout';
+
+const Index = () => {
   return (
-    <div className="bg-primary">
-      hello
-    </div>
+    <MainLayout>
+      test
+    </MainLayout>
   );
-}
+};
 
 export default Index;
