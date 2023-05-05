@@ -27,17 +27,17 @@ const IsbnSearchBox = () => {
   };
 
 
-  const renderMenuItemChildren = (option) => (
-    <div className="row">
-      <div className="col-3">
-        <img src={option.cover} alt={option.title} width="100%" />
-      </div>
-      <div className="col-9">
-        <Link href={`/book/${option.id}`}>
+  const renderMenuItemChildren = (option: any) => (
+    <Link href={`/book/${option.id}`}>
+      <div className="row">
+        <div className="col-3">
+          <img src={option.cover} alt={option.title} width="100%" />
+        </div>
+        <div className="col-9">
           {option.title}
-        </Link>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 
   return (

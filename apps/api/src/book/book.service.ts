@@ -6,6 +6,7 @@ import { SearchByIsbnDto } from './dto/search-by-isbn.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { BookApiService } from '../book-api/book-api.service';
 import { WorkService } from '../work/work.service';
+import { GetBookPagaDataDto } from './dto/get-book-page-data-dto';
 
 @Injectable()
 export class BookService {
@@ -75,7 +76,7 @@ export class BookService {
     return this.create(bookCreateInput);
   }
 
-  async searchByIsbn({ isbn }: SearchByIsbnDto): Promise<Book> {
+  async searchByIsbn({ isbn }: SearchByIsbnDto) {
     const book = await this.findByIsbn(isbn);
     if (book) {
       return book;
@@ -87,5 +88,31 @@ export class BookService {
     }
     
     throw new NotFoundException();
+  }
+
+  async getBookPageData({ id }: GetBookPagaDataDto) {
+    const book = await this.prismaService.book.findUnique({
+      where: { id },
+      include: {
+        work: {
+          select: {
+            authors: {
+              select: { id: true , name: true },
+            },
+            books: {
+              take: 10,
+              where: { id: { not: id } },
+            },
+            description: true,
+          },
+        },
+      },
+    });
+
+    if (!book) {
+      throw new NotFoundException();
+    }
+
+    return book;
   }
 }
