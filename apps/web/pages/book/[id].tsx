@@ -4,6 +4,7 @@ import { Book } from '@prisma/client';
 import ReactMarkdown from 'react-markdown'
 
 import MainLayout from '../../layouts/MainLayout';
+import BibblisServerApi from '../../utils/api/BibblisServerApi';
 
 interface BookPageProps {
   book: Book & {
@@ -21,6 +22,9 @@ interface BookPageProps {
 const BookPage = ({ book }: BookPageProps) => {
   const description = book.description || book.work.description;
   const cover = book.cover || '';
+
+  const hasOtherEditions = book.work.books?.length > 0;
+
   return (
     <MainLayout>
       <div className="row mt-5">
@@ -34,7 +38,7 @@ const BookPage = ({ book }: BookPageProps) => {
         </div>
         <div className="col-9">
           <h1>{book.title}</h1>
-          <h3>
+          <p className="h3">
             Por
             {book.work.authors.map((author, index: number) => (
               <span key={author.id}>
@@ -45,10 +49,24 @@ const BookPage = ({ book }: BookPageProps) => {
                 </Link>
               </span>
             ))}
-          </h3>
+          </p>
           <ReactMarkdown className="mt-4">
             {description}
           </ReactMarkdown>
+          { hasOtherEditions &&
+            <>
+              <h3 className="mt-5">Otras ediciones</h3>
+              <div className="row mt-4">
+                {book.work.books.map((book, index) => (
+                  <div className="col-2" key={book.id}>
+                    <Link href={`/book/${book.id}`} title={book.title}>
+                      <img src={book.cover} alt={book.title} className="img-fluid" />
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </>
+          }
         </div>
       </div>
     </MainLayout>
@@ -64,8 +82,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext<{ id
       notFound: true,
     };
   }
-  const res = await fetch(`http://localhost:3000/api/book/page-data/${bookId}`);
-  const book: Book = await res.json();
+  const book = await BibblisServerApi.getPageBookData(bookId);
   if (!book) {
     return {
       notFound: true,

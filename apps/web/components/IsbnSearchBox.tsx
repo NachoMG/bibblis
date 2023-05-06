@@ -6,26 +6,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-import Image from 'next/image';
+
+import BibblisClientApi from '../utils/api/BibblisClientApi';
 
 const IsbnSearchBox = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<any>([]);
 
-  const onSearch = (query: string) => {
+  const onSearch = async (query: string) => {
     if ([10, 13].includes(query.length)) {
       setIsLoading(true);
-      fetch(`http://localhost:3000/api/book/search/${query}`)
-      .then(resp => resp.json())
-      .then((json) => {
-        setOptions([json]);
-        setIsLoading(false);
-      });
+      const book = await BibblisClientApi.searchBook(query);
+      if (book) {
+        setOptions([book]);
+      } else {
+        setOptions([]);
+      }
     } else {
-      setIsLoading(false);
+      setOptions([]);
     }
+    setIsLoading(false);
   };
-
 
   const renderMenuItemChildren = (option: any) => (
     <Link href={`/book/${option.id}`}>
