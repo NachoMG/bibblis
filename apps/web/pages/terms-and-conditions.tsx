@@ -28,7 +28,7 @@ const TermsAndConditionsPage = () => {
         condiciones. No continúes usando Bibblis.com si no estás de acuerdo con
         todos los términos y condiciones establecidos en esta página.
       </p>
-      <h2>Cookies:</h2>
+      <h2>Cookies</h2>
       <p>
         El sitio web utiliza cookies para ayudar a personalizar tu experiencia
         en línea. Al acceder a Bibblis.com, aceptaste utilizar las cookies
@@ -54,7 +54,7 @@ const TermsAndConditionsPage = () => {
         ventana de visualización de video proporcionada por terceros e
         integrada en nuestro sitio web.
       </p>
-      <h2>Licencia:</h2>
+      <h2>Licencia</h2>
       <p>
         A menos que se indique lo contrario, Bibblis y/o sus licenciantes
         poseen los derechos de propiedad intelectual de todo el material en
@@ -118,7 +118,7 @@ const TermsAndConditionsPage = () => {
         cualquiera de tus comentarios en todas y cada una de las formas,
         formatos, o medios.
       </p>
-      <h2>Hipervínculos a nuestro contenido:</h2>
+      <h2>Hipervínculos a nuestro contenido</h2>
       <p>
         Las siguientes organizaciones pueden vincularse a nuestro sitio web sin
         aprobación previa por escrito:
@@ -212,7 +212,7 @@ const TermsAndConditionsPage = () => {
         No se permitirá el uso del logotipo de Bibblis u otro material gráfico
         para vincular sin un acuerdo de licencia de marca comercial.
       </p>
-      <h2>Responsabilidad del contenido:</h2>
+      <h2>Responsabilidad del contenido</h2>
       <p>
         No seremos responsables de ningún contenido que aparezca en tu sitio
         web. Aceptas protegernos y defendernos contra todas las reclamaciones
@@ -221,7 +221,7 @@ const TermsAndConditionsPage = () => {
         criminal, o que infrinja, de otra manera viole o defienda la infracción
         u otra violación de los derechos de terceros.
       </p>
-      <h2>Reserva de derechos:</h2>
+      <h2>Reserva de derechos</h2>
       <p>
         Nos reservamos el derecho de solicitar que elimines todos los enlaces o
         cualquier enlace en particular a nuestro sitio web. Apruebas eliminar
@@ -231,7 +231,7 @@ const TermsAndConditionsPage = () => {
         continuamente a nuestro sitio web, aceptas estar vinculado y seguir
         estos términos y condiciones de vinculación.
       </p>
-      <h2>Eliminación de enlaces de nuestro sitio web:</h2>
+      <h2>Eliminación de enlaces de nuestro sitio web</h2>
       <p>
         Si encuentras algún enlace en nuestro sitio que sea ofensivo por
         cualquier motivo, puedes contactarnos e informarnos en cualquier
@@ -244,7 +244,7 @@ const TermsAndConditionsPage = () => {
         que el sitio web permanezca disponible o que el material en el sitio se
         mantenga actualizado.
       </p>
-      <h2>Exención de responsabilidad:</h2>
+      <h2>Exención de responsabilidad</h2>
       <p>
         En la medida máxima permitida por la ley aplicable, excluimos todas las
         representaciones, garantías y condiciones relacionadas con nuestro
