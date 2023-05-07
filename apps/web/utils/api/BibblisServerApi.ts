@@ -17,6 +17,14 @@ const BibblisServerApi = (() => {
         return false;
       }
     },
+    getAuthorPageData: async (authorId: string) => {
+      try {
+        const res = await axiosInstance.get(`${baseUrl}/author/page-data/${authorId}`);
+        return res.data;
+      } catch (error) {
+        return false;
+      }
+    },
   };
 })();
 
