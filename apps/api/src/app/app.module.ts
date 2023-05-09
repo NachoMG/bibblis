@@ -22,7 +22,7 @@ import { UserModule } from '../user/user.module';
         },
       },
       defaults: {
-        from: '"No-reply" <no-reply@bibblis.com>',
+        from: '"Bibblis" <no-reply@bibblis.com>',
       },
       template: {
         dir: __dirname + '/assets/emails',
