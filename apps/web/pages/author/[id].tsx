@@ -43,7 +43,7 @@ const AuthorPage = ({ author }: AuthorPageProps) => {
             return (
               <div className="col-2" key={book.id}>
                 <Link href={`/book/${book.id}`} title={book.title}>
-                  <img src={book.cover} alt={book.title} className="img-fluid" />
+                  <img src={book.cover || ''} alt={book.title} className="img-fluid" />
                 </Link>
               </div>
             );
