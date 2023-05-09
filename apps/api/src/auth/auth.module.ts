@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { ConfigModule } from '@nestjs/config';
+import { EmailVerificationModule } from '../email-verification/email-verification.module';
 import { JwtAuthStrategy } from './strategies/jwt-auth.strategy';
 import { JwtRefreshTokenStrategy } from './strategies/jwt-refresh.strategy';
 import { PrismaModule } from '../prisma/prisma.module';
@@ -17,6 +18,7 @@ import { UserModule } from '../user/user.module';
     PrismaModule,
     RefreshTokenModule,
     UserModule,
+    EmailVerificationModule,
   ],
   controllers: [AuthController],
   providers: [

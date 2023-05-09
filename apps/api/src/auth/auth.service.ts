@@ -2,20 +2,24 @@ import Crypto from 'crypto';
 
 import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 import { Prisma } from '@prisma/client';
+import { MailerService } from '@nestjs-modules/mailer';
 
 import * as bcrypt from 'bcrypt';
 import ms from 'ms';
 
-import { IJwtAuthTokens } from './interfaces/i-tokens';
-import { SignUpDto } from './dto/sign-up.dto';
-import { UserService } from '../user/user.service';
+import {
+  EmailVerificationService
+} from '../email-verification/email-verification.service';
 import { IAccessTokenPayload } from './interfaces/i-access-token-payload';
+import { IJwtAuthTokens } from './interfaces/i-tokens';
 import { IRefreshTokenPayload } from './interfaces/i-refresh-token-payload';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
-import { ConfigService } from '@nestjs/config';
 import { SignInDto } from './dto/sign-in.dto';
+import { SignUpDto } from './dto/sign-up.dto';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +28,8 @@ export class AuthService {
     private userService: UserService,
     private refreshTokenService: RefreshTokenService,
     private configService: ConfigService,
+    private mailerService: MailerService,
+    private emailVerificationService: EmailVerificationService,
   ) {}
 
   private hash(data: string) {
@@ -72,15 +78,35 @@ export class AuthService {
     return { access_token, refresh_token };
   }
 
-  async signUp(signUpDto: SignUpDto): Promise<IJwtAuthTokens> {
-    const existingUser = await this.userService.findOne({
-      email: signUpDto.email,
+  private async generateConfirmEmailToken(userId: string, userEmail: string) {
+    const payload = { userId, email: userEmail };
+
+    await this.emailVerificationService.delete({ userId });
+
+    const confirmEmailToken = await this.jwtService.signAsync(payload, {
+      secret: this.configService.get('JWT_EMAIL_VERIFICATION_TOKEN_SECRET'),
+      expiresIn: this.configService.get('JWT_EMAIL_VERIFICATION_TOKEN_EXPIRATION_TIME'),
     });
+
+    const hashedToken = await this.hash(confirmEmailToken);
+
+    await this.emailVerificationService.insert({
+      userId,
+      hashedToken: hashedToken,
+      sentAt: new Date(),
+    });
+
+    return confirmEmailToken;
+  }
+
+  async signUp(signUpDto: SignUpDto): Promise<IJwtAuthTokens> {
+    const email = signUpDto.email.toLowerCase();
+    const existingUser = await this.userService.findOne({ email });
     if (existingUser) {
       throw new ConflictException('User already exists');
     }
   
-    if (signUpDto.email !== signUpDto.emailConfirm) {
+    if (email !== signUpDto.emailConfirm.toLowerCase()) {
       throw new BadRequestException(
         'Fields email and emailConfirm should have the same value'
       );
@@ -95,7 +121,7 @@ export class AuthService {
     const hashedPassword = await this.hash(signUpDto.password);
 
     const newUserData: Prisma.UserCreateInput = {
-      email: signUpDto.email,
+      email,
       password: hashedPassword,
       lang: signUpDto.lang,
       firstName: signUpDto.firstName,
@@ -104,11 +130,21 @@ export class AuthService {
       acceptedMarketing: signUpDto.acceptedMarketing,
     };
     const user = await this.userService.insert(newUserData);
+    
     const jwtAuthTokens = await this.generateJwtAuthTokens(
       user.id, user.email
-      );
+    );
+    const confirmEmailToken = await this.generateConfirmEmailToken(
+      user.id, user.email
+    );
 
-    // TODO Send confirmation email
+    this.mailerService.sendMail({
+      to: email,
+      subject: 'Bibblis - Activa tu cuenta',
+      template: 'sign-up',
+      context: { token: confirmEmailToken },
+    });
+
     return jwtAuthTokens;
   }
 
