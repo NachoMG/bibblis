@@ -1,0 +1,48 @@
+<mjml>
+  <mj-head>
+    <mj-title>Bibblis - Activa tu cuenta</mj-title>
+    <mj-font
+      name="Open Sans"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap"
+    />
+  </mj-head>
+  <mj-body background-color="#F7F9F9">
+    <mj-section background-color="#3F88C5">
+      <mj-column>
+        <mj-image
+          src="https://bibblis.com/bibblis-logo.png" alt="Bibblis logo"
+          href="https://bibblis.com" align="left" width="121px"
+        />
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="white">
+      <mj-column>
+        <mj-text
+          color="#2A2D34" font-size="40px"
+          font-family="Open Sans, Arial" font-weight="700"
+        >
+          <b>Activa tu cuenta</b>
+        </mj-text>
+        <mj-text
+          color="#2A2D34" font-size="16px" font-family="Open Sans, Arial"
+        >
+          Necesitamos confirmar tu cuenta de correo electrónico. Haz click en
+          el siguiente botón para ello:
+        </mj-text>
+        <mj-button
+          href="https://bibblis.com/auth/confirm-email/{{ token }}"
+          font-size="16px" background-color="#2A2D34" border-radius="6px"
+        >
+          Activar mi cuenta
+        </mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#3F88C5">
+      <mj-column>
+        <mj-text color="white" font-size="16px" font-family="Open Sans, Arial">
+          <b>Bibblis 2023</b>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
