@@ -19,7 +19,7 @@ export class EmailVerificationService {
   }
 
   delete(query: Prisma.EmailVerificationWhereUniqueInput) {
-    return this.prismaService.emailVerification.delete({ where: query })
+    return this.prismaService.emailVerification.deleteMany({ where: query })
   }
 
 }
