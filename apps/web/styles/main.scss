@@ -22,7 +22,8 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 // Default styles
 
 body {
-    background-color: $main-background-color;
+  background-color: $main-background-color;
+  font-size: 16px;
 }
 
 // Components

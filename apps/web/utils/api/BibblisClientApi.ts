@@ -1,4 +1,7 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+
+import { ISignUpData } from '../../types/i-sign-up-data';
+
 import isProd from '../isProd';
 
 const BibblisClientApi = (() => {
@@ -17,6 +20,17 @@ const BibblisClientApi = (() => {
         return res.data;
       } catch (error) {
         return false;
+      }
+    },
+    signUp: async (signUpData: ISignUpData) => {
+      try {
+        await axiosInstance.post(`${baseUrl}/auth/sign-up`, signUpData);
+        return { error: false, status: 200 };
+      } catch (error) {
+        return {
+          error: true,
+          status: axios.isAxiosError(error) && error.response?.status || 0,
+        }
       }
     },
   };

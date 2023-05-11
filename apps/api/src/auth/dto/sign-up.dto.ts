@@ -18,14 +18,14 @@ export class SignUpDto {
     example: 'password',
   })
   @IsString()
-  @MinLength(10)
+  @MinLength(8)
   password: string;
 
   @ApiProperty({
     example: 'password',
   })
   @IsString()
-  @MinLength(10)
+  @MinLength(8)
   passwordConfirm: string;
 
   @ApiProperty({
