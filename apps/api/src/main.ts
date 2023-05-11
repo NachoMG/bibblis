@@ -18,7 +18,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .addCookieAuth('refresh')
-    .setTitle('Libbuk')
+    .setTitle('Bibblis')
     .setVersion('0.1')
     .build();
   const document = SwaggerModule.createDocument(app, config);

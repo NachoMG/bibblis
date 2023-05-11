@@ -1,6 +1,6 @@
 {
   "name": "bibblis",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "license": "MIT",
   "scripts": {
     "dockers:dev": "docker-compose -f tools/environment/dev.docker-compose.yml up -d --no-recreate --remove-orphans",
