@@ -10,7 +10,7 @@ generator client {
 model User {
   id                String             @id @default(uuid())
   email             String             @unique @db.VarChar(255)
-  password          String             @db.VarChar(255)
+  password          String
   lang              String             @db.Char(2)
   firstName         String             @db.VarChar(100)
   lastName          String             @db.VarChar(100)
