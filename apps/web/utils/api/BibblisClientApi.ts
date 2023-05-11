@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 import { ISignUpData } from '../../types/i-sign-up-data';
 
