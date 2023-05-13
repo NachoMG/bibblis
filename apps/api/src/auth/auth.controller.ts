@@ -1,19 +1,21 @@
 import { Body, Controller, Post, UseGuards, Res, HttpCode, Req } from '@nestjs/common';
 
-import { ApiCookieAuth, ApiResponse, ApiOperation } from '@nestjs/swagger';
+import { ApiCookieAuth,ApiResponse, ApiOperation, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { Response } from 'express';
 
 import { AuthService } from './auth.service';
 import { JwtEmailVerificationGuard } from './guards/jwt-email-verification.guard';
-import { JwtPasswordResetGuard } from './guards/jwt-password-reset.guard';
+// import { JwtPasswordResetGuard } from './guards/jwt-password-reset.guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { IRequestWithRefreshTokenPayload } from './interfaces/i-request-with-refresh-token-payload';
+// import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { IRequestWithRefreshTokenPayloadWithToken } from './interfaces/i-request-with-refresh-token-payload-with-token';
+import { IRequestWithDefaultTokenPayloadWithToken } from './interfaces/i-request-with-access-token-payload-with-token';
 
 
+@ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -55,7 +57,7 @@ export class AuthController {
   @Post('refresh')
   @HttpCode(200)
   async refresh(
-    @Req() req: IRequestWithRefreshTokenPayload,
+    @Req() req: IRequestWithRefreshTokenPayloadWithToken,
     @Res({ passthrough: true }) res: Response
   ) {
     const { access_token, refresh_token } = await this.authService.refresh(req.user);
@@ -66,21 +68,28 @@ export class AuthController {
   @UseGuards(JwtRefreshGuard)
   @ApiCookieAuth()
   @ApiOperation({ summary: 'User sign out' })
-  @ApiResponse({ status: 200, description: 'Refresh token succeesfully destroyed' })
+  @ApiResponse({ status: 200, description: 'Refresh token successfully destroyed' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @Post('sign-out')
   @HttpCode(200)
   signOut(
-    @Req() req: IRequestWithRefreshTokenPayload,
+    @Req() req: IRequestWithRefreshTokenPayloadWithToken,
     @Res({ passthrough: true }) res: Response
   ) {
     this.authService.signOut(req.user);
     res.clearCookie('refresh');
   }
 
-  // @UseGuards(JwtEmailVerificationGuard)
-  // @Post('verify-email')
-  // verifyEmail() {}
+  @UseGuards(JwtEmailVerificationGuard)
+  @ApiBearerAuth('Confirm email token')
+  @ApiOperation({ summary: 'User email confirmation' })
+  @ApiResponse({ status: 200, description: 'Email successfully confirmed' })
+  @ApiResponse({ status: 401, description: 'Unauthorized (invalid confirmation token)' })
+  @ApiResponse({ status: 404, description: 'Token not found' })
+  @Post('verify-email')
+  async verifyEmail(@Req() req: IRequestWithDefaultTokenPayloadWithToken) {
+    await this.authService.verifyEmail(req.user);
+  }
 
   // @Post('forgot-password')
   // forgotPassword() {}

@@ -1,6 +1,6 @@
 import Crypto from 'crypto';
 
-import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
@@ -13,13 +13,15 @@ import ms from 'ms';
 import {
   EmailVerificationService
 } from '../email-verification/email-verification.service';
-import { IAccessTokenPayload } from './interfaces/i-access-token-payload';
+import { IDefaultTokenPayload } from './interfaces/i-default-token-payload';
 import { IJwtAuthTokens } from './interfaces/i-tokens';
 import { IRefreshTokenPayload } from './interfaces/i-refresh-token-payload';
+import { IRefreshTokenPayloadWithToken } from './interfaces/i-refresh-token-payload-with-token';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { UserService } from '../user/user.service';
+import { IDefaultTokenPayloadWithToken } from './interfaces/i-default-token-payload-with-token';
 
 @Injectable()
 export class AuthService {
@@ -37,7 +39,7 @@ export class AuthService {
   }
 
   private async generateAccessToken(userId: string, userEmail: string) {
-    const accessTokenPayload: IAccessTokenPayload = {
+    const accessTokenPayload: IDefaultTokenPayload = {
       sub: userId,
       email: userEmail,
     };
@@ -79,7 +81,7 @@ export class AuthService {
   }
 
   private async generateConfirmEmailToken(userId: string, userEmail: string) {
-    const payload = { userId, email: userEmail };
+    const payload = { sub: userId, email: userEmail };
 
     await this.emailVerificationService.delete({ userId });
 
@@ -164,7 +166,7 @@ export class AuthService {
     return this.generateJwtAuthTokens(user.id, user.email);
   }
 
-  async refresh({ sub: userId, email, jti, token }: IRefreshTokenPayload) {
+  async refresh({ sub: userId, email, jti, token }: IRefreshTokenPayloadWithToken) {
     const refreshToken = await this.refreshTokenService.findOne({ jti });
     if (
       !refreshToken
@@ -180,5 +182,36 @@ export class AuthService {
 
   async signOut({ jti }: IRefreshTokenPayload) {
     await this.refreshTokenService.delete({ jti });
+  }
+
+  async verifyEmail({ sub: userId, token }: IDefaultTokenPayloadWithToken) {
+    const emailVerification = await this.emailVerificationService.findOne({
+      userId,
+      completedAt: null,
+    });
+    if (!emailVerification) {
+      throw new NotFoundException();
+    }
+
+    const isSameToken = bcrypt.compare(token, emailVerification.hashedToken);
+    if (!isSameToken) {
+      throw new UnauthorizedException();
+    }
+
+    try {
+      await Promise.all([
+        this.emailVerificationService.updateOne({
+          where: { userId },
+          data: { completedAt: new Date() },
+        }),
+        this.userService.updateOne({
+          where: { id: userId },
+          data: { validated: true },
+        }),
+      ]);
+    } catch (exception) {
+      // TODO log exception?
+      throw new InternalServerErrorException();
+    }
   }
 }

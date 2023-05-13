@@ -18,6 +18,14 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .addCookieAuth('refresh')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      'Confirm email token'
+    )
     .setTitle('Libbuk')
     .setVersion('0.1')
     .build();

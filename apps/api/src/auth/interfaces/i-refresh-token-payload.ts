@@ -1,6 +1,5 @@
-import { IAccessTokenPayload } from './i-access-token-payload';
+import { IDefaultTokenPayload } from './i-default-token-payload';
 
-export interface IRefreshTokenPayload extends IAccessTokenPayload {
+export interface IRefreshTokenPayload extends IDefaultTokenPayload {
   jti: string;
-  token?: string;
 }

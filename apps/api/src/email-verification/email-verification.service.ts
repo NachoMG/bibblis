@@ -14,7 +14,7 @@ export class EmailVerificationService {
   
   insert(emailVerification: Prisma.EmailVerificationUncheckedCreateInput) {
     return this.prismaService.emailVerification.create({
-        data: emailVerification
+      data: emailVerification,
     });
   }
 
@@ -22,4 +22,7 @@ export class EmailVerificationService {
     return this.prismaService.emailVerification.deleteMany({ where: query })
   }
 
+  updateOne(update: Prisma.EmailVerificationUpdateArgs) {
+    return this.prismaService.emailVerification.update(update);
+  }
 }

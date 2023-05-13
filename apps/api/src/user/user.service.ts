@@ -15,4 +15,8 @@ export class UserService {
   async insert(user: Prisma.UserCreateInput) {
     return this.prismaService.user.create({ data: user });
   }
+
+  updateOne(update: Prisma.UserUpdateArgs) {
+    return this.prismaService.user.update(update);
+  }
 }
