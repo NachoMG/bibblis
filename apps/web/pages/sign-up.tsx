@@ -248,7 +248,7 @@ const SignUp = () => {
               <div className="col-12 mt-2">
                 <input
                   type="submit" value="Registrarme"
-                  className="btn btn-primary w-100 text-white w-100"
+                  className="btn btn-primary w-100"
                 />
               </div>
             </form>
@@ -272,7 +272,7 @@ const SignUp = () => {
                     ||
                       <p>¡Ups! Ha ocurrido un error</p>
                     }
-                    <button className="btn btn-primary text-white w-100" onClick={resetForm}>
+                    <button className="btn btn-primary w-100" onClick={resetForm}>
                       Volver a intentarlo
                     </button>
                   </>

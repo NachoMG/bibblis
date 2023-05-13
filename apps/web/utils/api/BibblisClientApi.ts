@@ -33,6 +33,18 @@ const BibblisClientApi = (() => {
         }
       }
     },
+    confirmEmail: async (confirmEmailToken: string) => {
+      try {
+        await axiosInstance.post(`${baseUrl}/auth/verify-email`, false, {
+          headers: {
+            'Authorization': `Bearer ${confirmEmailToken}`,
+          },
+        });
+      } catch (error) {
+        return false;
+      }
+      return true;
+    },
   };
 })();
 

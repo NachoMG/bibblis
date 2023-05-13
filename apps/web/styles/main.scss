@@ -26,6 +26,11 @@ body {
   font-size: 16px;
 }
 
+.btn-primary {
+  color: white;
+  :hover { color: white; }
+}
+
 // Components
 
 @import 'common.scss';
