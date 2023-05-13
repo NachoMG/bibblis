@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import Head from 'next/head';
 import Link from 'next/link';
 
@@ -10,7 +12,7 @@ import * as yup from 'yup';
 import MainLayout from '../layouts/MainLayout';
 
 import { ISignUpData } from '../types/i-sign-up-data';
-import { useState } from 'react';
+
 import BibblisClientApi from '../utils/api/BibblisClientApi';
 
 const SignUp = () => {
