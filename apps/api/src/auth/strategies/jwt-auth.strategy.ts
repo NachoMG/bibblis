@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { IDefaultTokenPayload } from '../interfaces/i-default-token-payload';
 
 @Injectable()
 export class JwtAuthStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -13,7 +14,7 @@ export class JwtAuthStrategy extends PassportStrategy(Strategy, 'jwt') {
     })
   }
 
-  validate(payload: any) {
+  validate(payload: IDefaultTokenPayload) {
     return { userId: payload.sub, email: payload.email };
   }
 }
