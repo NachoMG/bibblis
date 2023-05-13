@@ -1,4 +1,5 @@
 import Crypto from 'crypto';
+import querystring from 'node:querystring';
 
 import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -140,13 +141,15 @@ export class AuthService {
       user.id, user.email
     );
 
+    const confirmEmailQuerystring = querystring.stringify({
+      token: confirmEmailToken,
+    });
     this.mailerService.sendMail({
       to: email,
       subject: 'Bibblis - Activa tu cuenta',
       template: 'sign-up',
-      context: { token: confirmEmailToken },
+      context: { confirmEmailQuerystring },
     });
-
     return jwtAuthTokens;
   }
 
