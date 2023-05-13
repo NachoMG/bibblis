@@ -30,7 +30,7 @@
           el siguiente botón para ello:
         </mj-text>
         <mj-button
-          href="https://bibblis.com/auth/confirm-email?{{ confirmEmailQuerystring }}"
+          href="https://bibblis.com/confirm-email?{{ confirmEmailQuerystring }}"
           font-size="16px" background-color="#2A2D34" border-radius="6px"
         >
           Activar mi cuenta
