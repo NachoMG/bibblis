@@ -1,4 +1,4 @@
-// Bootstrap override
+// Bootstrap overrides
 
 $primary: #3F88C5;
 $secondary: #2A2D34;
@@ -8,7 +8,7 @@ $tertiary: #8DC63F;
 @import 'bootstrap/scss/variables';
 
 $custom-colors: (
-  "tertiary": $tertiary
+  'tertiary': $tertiary
 );
 
 $theme-colors: map-merge($theme-colors, $custom-colors);
@@ -31,8 +31,14 @@ body {
   :hover { color: white; }
 }
 
+a {
+  color: $tertiary;
+  text-decoration: none;
+  &:hover {  color: darken($tertiary, 10%);  }
+}
+
 // Components
 
 @import 'common.scss';
+@import 'footer.scss';
 @import 'isbn-search-box.scss';
-
