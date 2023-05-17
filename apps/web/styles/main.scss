@@ -26,10 +26,7 @@ body {
   font-size: 16px;
 }
 
-.btn-primary {
-  color: white;
-  :hover { color: white; }
-}
+.btn-primary {  color: white !important;  }
 
 a {
   color: $tertiary;
