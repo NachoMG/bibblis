@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+import isProd from '../isProd';
+
 const BibblisServerApi = (() => {
-  const baseHost = 'http://localhost:3000';
+  const baseHost = isProd && 'https://bibblis.com' || 'http://localhost:3000';
+
   const baseUrl = `${baseHost}/api`;
   const axiosInstance = axios.create();
 
