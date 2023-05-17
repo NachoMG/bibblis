@@ -5,8 +5,7 @@ WORKDIR /user/src/app
 COPY dist/apps/api/package*.json ./
 COPY prisma ./prisma/
 
-RUN npm ci --omit=dev
-
+RUN npm install
 
 FROM node:18-alpine as runner
 
