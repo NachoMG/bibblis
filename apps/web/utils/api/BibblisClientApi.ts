@@ -8,7 +8,7 @@ import isProd from '../isProd';
 import AccessToken from '../AccessToken';
 
 const BibblisClientApi = (() => {
-  const baseHost = isProd && 'https://biblis.com' || 'http://localhost:3000';
+  const baseHost = isProd && 'https://bibblis.com' || 'http://localhost:3000';
 
   const baseUrl = `${baseHost}/api`;
   const axiosInstance = axios.create();
