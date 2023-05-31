@@ -20,8 +20,10 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 @import 'variables.scss';
 
 // Default styles
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
 
 body {
+  font-family: 'Open Sans', sans-serif;
   background-color: $main-background-color;
   font-size: 16px;
 }
