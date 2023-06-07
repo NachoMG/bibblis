@@ -13,6 +13,7 @@ import { ISignInData } from '../types/i-sign-in-data';
 
 import MainLayout from '../layouts/MainLayout';
 import BibblisClientApi from '../utils/api/BibblisClientApi';
+import Link from 'next/link';
 
 const SignIn = () => {
   const signInSchema = yup.object<ISignInData>().shape({
@@ -98,10 +99,18 @@ const SignIn = () => {
             </div>
           </form>
           {error && 
-            <div className="alert alert-danger mt-3" role="alert">
+            <div className="alert alert-danger mt-3 mb-0" role="alert">
               {error}
             </div>
           }
+          <div className="row">
+            <div className="col">
+              <p className="mt-3 mb-0">
+                ¿Has olvidado tu contraseña? Haz click
+                <Link href="/forgot-password"> aquí</Link>.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </MainLayout>

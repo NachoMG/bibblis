@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ISignInData } from '../../types/i-sign-in-data';
 import { ISignInResData } from '../../types/i-sign-in-res-data';
 import { ISignUpData } from '../../types/i-sign-up-data';
+import { IForgotPasswordData } from '../../types/i-forgot-password-data';
 
 import isProd from '../isProd';
 import AccessToken from '../AccessToken';
@@ -52,6 +53,14 @@ const BibblisClientApi = (() => {
       try {
         const response = await axiosInstance.post<ISignInResData>(`${baseUrl}/auth/sign-in`, signInData);
         AccessToken.set(response.data.access_token);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    forgotPassword: async (forgotPassworData: IForgotPasswordData) => {
+      try {
+        await axiosInstance.post<IForgotPasswordData>(`${baseUrl}/auth/forgot-password`, forgotPassworData);
         return true;
       } catch (error) {
         return false;
