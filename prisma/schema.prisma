@@ -4,7 +4,7 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["extendedWhereUnique"]
 }
 
@@ -48,12 +48,11 @@ model EmailVerification {
 
 model PasswordReset {
   id          Int       @id @default(autoincrement())
-  userId      String    @unique
+  userId      String
   hashedToken String    @unique
-  sentAt      DateTime
   completedAt DateTime?
-  expiresAt   DateTime
   createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   active      Boolean   @default(true)
   user        User      @relation(fields: [userId], references: [id])
 }

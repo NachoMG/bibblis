@@ -8,6 +8,7 @@ import { AuthService } from './auth.service';
 import { JwtEmailVerificationGuard } from './guards/jwt-email-verification.guard';
 // import { JwtPasswordResetGuard } from './guards/jwt-password-reset.guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
 // import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -91,8 +92,12 @@ export class AuthController {
     await this.authService.verifyEmail(req.user);
   }
 
-  // @Post('forgot-password')
-  // forgotPassword() {}
+  @ApiOperation({ summary: 'Sends a reset password email' })
+  @ApiResponse({ status: 200, description: 'Login OK' })
+  @Post('forgot-password')
+  forgotPassword(@Body() req: ForgotPasswordDto) {
+    this.authService.forgotPassword(req);
+  }
 
   // @UseGuards(JwtPasswordResetGuard)
   // @Post('reset-password')

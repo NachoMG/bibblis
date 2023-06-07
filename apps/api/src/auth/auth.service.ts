@@ -11,28 +11,29 @@ import { MailerService } from '@nestjs-modules/mailer';
 import * as bcrypt from 'bcrypt';
 import ms from 'ms';
 
-import {
-  EmailVerificationService
-} from '../email-verification/email-verification.service';
+import { EmailVerificationService } from '../email-verification/email-verification.service';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { IDefaultTokenPayload } from './interfaces/i-default-token-payload';
+import { IDefaultTokenPayloadWithToken } from './interfaces/i-default-token-payload-with-token';
 import { IJwtAuthTokens } from './interfaces/i-tokens';
 import { IRefreshTokenPayload } from './interfaces/i-refresh-token-payload';
 import { IRefreshTokenPayloadWithToken } from './interfaces/i-refresh-token-payload-with-token';
+import { PasswordResetService } from '../password-reset/password-reset.service';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { UserService } from '../user/user.service';
-import { IDefaultTokenPayloadWithToken } from './interfaces/i-default-token-payload-with-token';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private jwtService: JwtService,
-    private userService: UserService,
-    private refreshTokenService: RefreshTokenService,
     private configService: ConfigService,
-    private mailerService: MailerService,
     private emailVerificationService: EmailVerificationService,
+    private jwtService: JwtService,
+    private mailerService: MailerService,
+    private passwordResetService: PasswordResetService,
+    private refreshTokenService: RefreshTokenService,
+    private userService: UserService,
   ) {}
 
   private hash(data: string) {
@@ -100,6 +101,29 @@ export class AuthService {
     });
 
     return confirmEmailToken;
+  }
+
+  private async generateResetPasswordToken(userId: string, userEmail: string) {
+    const payload = { sub: userId, email: userEmail };
+
+    const resetPasswordToken = await this.jwtService.signAsync(payload, {
+      secret: this.configService.get('JWT_RESET_PASSWORD_TOKEN_SECRET'),
+      expiresIn: this.configService.get('JWT_RESET_PASSWORD_TOKEN_EXPIRATION_TIME'),
+    });
+
+    const hashedResetPasswordToken = await this.hash(resetPasswordToken);
+
+    await Promise.all([
+      this.passwordResetService.updateMany(
+        { active: true, userId }, { active: false }
+      ),
+      this.passwordResetService.insert({
+        userId,
+        hashedToken: hashedResetPasswordToken,
+      }),
+    ]);
+
+    return hashedResetPasswordToken;
   }
 
   async signUp(signUpDto: SignUpDto): Promise<IJwtAuthTokens> {
@@ -215,6 +239,24 @@ export class AuthService {
     } catch (exception) {
       // TODO log exception?
       throw new InternalServerErrorException();
+    }
+  }
+
+  async forgotPassword({ email }: ForgotPasswordDto) {
+    const user = await this.userService.findOne({ email });
+    if (user) {
+      const resetPasswordToken = await this.generateResetPasswordToken(
+        user.id, user.email
+      );
+      const resetPasswordQuerystring = querystring.stringify({
+        token: resetPasswordToken,
+      });
+      this.mailerService.sendMail({
+        to: email,
+        subject: 'Bibblis - Modifica tu contraseña',
+        template: 'reset-password',
+        context: { resetPasswordQuerystring },
+      });
     }
   }
 }
