@@ -115,7 +115,8 @@ export class AuthService {
 
     await Promise.all([
       this.passwordResetService.updateMany(
-        { active: true, userId }, { active: false }
+        { active: true, userId, completedAt: null },
+        { active: false }
       ),
       this.passwordResetService.insert({
         userId,
