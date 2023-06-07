@@ -5,16 +5,14 @@ import { ApiCookieAuth,ApiResponse, ApiOperation, ApiBearerAuth, ApiTags } from 
 import { Response } from 'express';
 
 import { AuthService } from './auth.service';
-import { JwtEmailVerificationGuard } from './guards/jwt-email-verification.guard';
-// import { JwtPasswordResetGuard } from './guards/jwt-password-reset.guard';
-import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
-import { SignUpDto } from './dto/sign-up.dto';
-import { SignInDto } from './dto/sign-in.dto';
-// import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { IRequestWithRefreshTokenPayloadWithToken } from './interfaces/i-request-with-refresh-token-payload-with-token';
 import { IRequestWithDefaultTokenPayloadWithToken } from './interfaces/i-request-with-access-token-payload-with-token';
-
+import { IRequestWithRefreshTokenPayloadWithToken } from './interfaces/i-request-with-refresh-token-payload-with-token';
+import { JwtEmailVerificationGuard } from './guards/jwt-email-verification.guard';
+import { JwtPasswordResetGuard } from './guards/jwt-password-reset.guard';
+import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
+import { SignInDto } from './dto/sign-in.dto';
+import { SignUpDto } from './dto/sign-up.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -99,7 +97,14 @@ export class AuthController {
     this.authService.forgotPassword(req);
   }
 
-  // @UseGuards(JwtPasswordResetGuard)
-  // @Post('reset-password')
-  // resetPassword() {}
+  @UseGuards(JwtPasswordResetGuard)
+  @ApiBearerAuth('Reset password token')
+  @ApiOperation({ summary: 'Checks if a reset password token is valid' })
+  @ApiResponse({ status: 200, description: 'Valid reset password token' })
+  @ApiResponse({ status: 401, description: 'Unauthorized (invalid confirmation token)' })
+  @ApiResponse({ status: 404, description: 'Token not found' })
+  @Post('/check-reset-password-token')
+  async checkResetPasswordToken(@Req() req: IRequestWithDefaultTokenPayloadWithToken) {
+    await this.authService.checkResetPasswordToken(req.user);
+  }
 }

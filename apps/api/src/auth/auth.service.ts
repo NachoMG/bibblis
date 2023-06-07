@@ -113,18 +113,16 @@ export class AuthService {
 
     const hashedResetPasswordToken = await this.hash(resetPasswordToken);
 
-    await Promise.all([
-      this.passwordResetService.updateMany(
-        { active: true, userId, completedAt: null },
-        { active: false }
-      ),
-      this.passwordResetService.insert({
-        userId,
-        hashedToken: hashedResetPasswordToken,
-      }),
-    ]);
+    await this.passwordResetService.updateMany(
+      { active: true, userId, completedAt: null },
+      { active: false }
+    );
+    await this.passwordResetService.insert({
+      userId,
+      hashedToken: hashedResetPasswordToken,
+    });
 
-    return hashedResetPasswordToken;
+    return resetPasswordToken;
   }
 
   async signUp(signUpDto: SignUpDto): Promise<IJwtAuthTokens> {
@@ -258,6 +256,22 @@ export class AuthService {
         template: 'reset-password',
         context: { resetPasswordQuerystring },
       });
+    }
+  }
+
+  async checkResetPasswordToken({ sub: userId, token }: IDefaultTokenPayloadWithToken) {
+    const resetPassword = await this.passwordResetService.findFirst({
+      userId,
+      active: true,
+      completedAt: null,
+    });
+    if (!resetPassword) {
+      throw new NotFoundException();
+    }
+
+    const isSameToken = await bcrypt.compare(token, resetPassword.hashedToken);
+    if (!isSameToken) {
+      throw new UnauthorizedException();
     }
   }
 }

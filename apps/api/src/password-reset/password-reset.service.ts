@@ -11,6 +11,10 @@ export class PasswordResetService {
     return this.prismaService.passwordReset.findUnique({ where: query });
   }
 
+  findFirst(query: Prisma.PasswordResetWhereInput) {
+    return this.prismaService.passwordReset.findFirst({ where: query });
+  }
+
   insert(passwordReset: Prisma.PasswordResetUncheckedCreateInput) {
     return this.prismaService.passwordReset.create({ data: passwordReset });
   }

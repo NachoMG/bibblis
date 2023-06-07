@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { EmailVerificationModule } from '../email-verification/email-verification.module';
 import { JwtAuthStrategy } from './strategies/jwt-auth.strategy';
 import { JwtEmailVerificationStrategy } from './strategies/jwt-email-verification.strategy';
+import { JwtPasswordResetStrategy } from './strategies/jwt-password-reset.strategy';
 import { JwtRefreshTokenStrategy } from './strategies/jwt-refresh.strategy';
 import { PasswordResetModule } from '../password-reset/password-reset.module';
 import { PrismaModule } from '../prisma/prisma.module';
@@ -29,6 +30,7 @@ import { UserModule } from '../user/user.module';
     JwtAuthStrategy,
     JwtEmailVerificationStrategy,
     JwtRefreshTokenStrategy,
+    JwtPasswordResetStrategy,
   ],
 })
 export class AuthModule {}
