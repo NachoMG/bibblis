@@ -273,5 +273,23 @@ export class AuthService {
     if (!isSameToken) {
       throw new UnauthorizedException();
     }
+
+    return resetPassword;
+  }
+
+  async resetPassword(
+    tokenPayloadWithToken: IDefaultTokenPayloadWithToken, newPassword: string
+  ) {
+    const resetPassword = await this.checkResetPasswordToken(tokenPayloadWithToken);
+    
+    const newHashedPassword = await this.hash(newPassword);
+    await this.userService.updateOne({
+      where: { id: tokenPayloadWithToken.sub },
+      data: { password: newHashedPassword },
+    });
+    await this.passwordResetService.updateOne(
+      { id: resetPassword.id },
+      { completedAt: new Date() },
+    );
   }
 }

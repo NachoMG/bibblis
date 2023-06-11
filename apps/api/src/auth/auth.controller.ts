@@ -11,6 +11,7 @@ import { IRequestWithRefreshTokenPayloadWithToken } from './interfaces/i-request
 import { JwtEmailVerificationGuard } from './guards/jwt-email-verification.guard';
 import { JwtPasswordResetGuard } from './guards/jwt-password-reset.guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 
@@ -106,5 +107,19 @@ export class AuthController {
   @Post('/check-reset-password-token')
   async checkResetPasswordToken(@Req() req: IRequestWithDefaultTokenPayloadWithToken) {
     await this.authService.checkResetPasswordToken(req.user);
+  }
+
+  @UseGuards(JwtPasswordResetGuard)
+  @ApiBearerAuth('Reset password token')
+  @ApiOperation({ summary: 'Checks if a reset password token is valid' })
+  @ApiResponse({ status: 200, description: 'Valid reset password token' })
+  @ApiResponse({ status: 401, description: 'Unauthorized (invalid reset password token)' })
+  @ApiResponse({ status: 404, description: 'Token not found' })
+  @Post('/reset-password')
+  async resetPassword(
+    @Req() req: IRequestWithDefaultTokenPayloadWithToken,
+    @Body() resetPasswordDto: ResetPasswordDto
+  ) {
+    await this.authService.resetPassword(req.user, resetPasswordDto.newPassword);
   }
 }

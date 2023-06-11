@@ -19,6 +19,16 @@ export class PasswordResetService {
     return this.prismaService.passwordReset.create({ data: passwordReset });
   }
 
+  updateOne(
+    query: Prisma.PasswordResetWhereUniqueInput,
+    modifier: Prisma.PasswordResetUpdateInput
+  ) {
+    return this.prismaService.passwordReset.update({
+      where: query,
+      data: modifier,
+    });
+  }
+
   updateMany(query: Prisma.PasswordResetWhereInput, modifier: Prisma.PasswordResetUpdateInput) {
     return this.prismaService.passwordReset.updateMany({
       where: query,
