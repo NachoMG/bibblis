@@ -51,6 +51,7 @@
     "yup": "^1.1.1"
   },
   "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^10.2.2",
     "@nestjs/schematics": "9.1.0",
     "@nestjs/testing": "9.4.0",
     "@nx/cypress": "16.1.1",
@@ -91,6 +92,7 @@
     "nx": "16.1.1",
     "prettier": "^2.6.2",
     "prisma": "^4.13.0",
+    "prisma-erd-generator": "^1.6.2",
     "react-test-renderer": "18.2.0",
     "sass": "1.61.0",
     "ts-jest": "29.1.0",
