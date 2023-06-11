@@ -89,6 +89,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext<{ id
     };
   }
   return {
-    props: { book }, // will be passed to the page component as props
+    props: { book },
   };
 };

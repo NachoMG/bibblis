@@ -20,20 +20,25 @@ interface AuthorPageProps {
 }
 
 const AuthorPage = ({ author }: AuthorPageProps) => {
+  const authorImage = author.image || '';
+
   return (
     <MainLayout>
-      <div className="row">
-        <div className="col">
+      <div className="row mt-5">
+        <div className="col-3">
+          <img src={authorImage} alt={author.name} className="img-fluid" />
+        </div>
+        <div className="col-9">
           <h1>{author.name}</h1>
           {author.birthDate &&
             <h3>{author.birthDate}</h3>
           }
+          {author.bio &&
+            <ReactMarkdown className="mt-4">
+              {author.bio}
+            </ReactMarkdown>
+          }
         </div>
-        {author.bio &&
-          <ReactMarkdown className="mt-4">
-            {author.bio}
-          </ReactMarkdown>
-        }
         <h2 className="mt-5">
           Obras
         </h2>

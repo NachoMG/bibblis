@@ -105,6 +105,12 @@ export class BookApiService {
       aliases: openLibraryAuthor.alternate_names || [],
       bio: openLibraryAuthor.bio?.value || openLibraryAuthor.bio || undefined,
       birthDate: openLibraryAuthor.birth_date,
+      image: (
+        Array.isArray(openLibraryAuthor.photos)
+        && openLibraryAuthor.photos[0]
+        && `https://covers.openlibrary.org/a/id/${openLibraryAuthor.photos[0]}-L.jpg`
+        || undefined
+      ),
     };
   }
 

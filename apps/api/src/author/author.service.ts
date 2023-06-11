@@ -27,6 +27,7 @@ export class AuthorService {
       name: authorApiData.name,
       bio: authorApiData.bio || undefined,
       birthDate: authorApiData.birthDate,
+      image: authorApiData.image,
       aliases: { create: authorApiData.aliases.map((alias) => ({ alias })) },
     };
     return this.create(authorCreateInput);

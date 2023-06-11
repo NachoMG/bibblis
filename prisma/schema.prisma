@@ -67,6 +67,7 @@ model Author {
   name      String
   bio       String?
   birthDate String?
+  image     String?
   works     Work[]
   aliases   AuthorAlias[]
   createdAt DateTime      @default(now())
