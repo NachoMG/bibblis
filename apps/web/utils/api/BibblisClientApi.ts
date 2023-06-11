@@ -4,6 +4,7 @@ import { ISignInData } from '../../types/i-sign-in-data';
 import { ISignInResData } from '../../types/i-sign-in-res-data';
 import { ISignUpData } from '../../types/i-sign-up-data';
 import { IForgotPasswordData } from '../../types/i-forgot-password-data';
+import { IResetPasswordData } from '../../types/i-reset-password-data';
 
 import isProd from '../isProd';
 import AccessToken from '../AccessToken';
@@ -61,6 +62,30 @@ const BibblisClientApi = (() => {
     forgotPassword: async (forgotPassworData: IForgotPasswordData) => {
       try {
         await axiosInstance.post<IForgotPasswordData>(`${baseUrl}/auth/forgot-password`, forgotPassworData);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    checkResetPasswordToken: async (resetPasswordToken: string) => {
+      try {
+        await axiosInstance.post(`${baseUrl}/auth/check-reset-password-token`, false, {
+          headers: {
+            'Authorization': `Bearer ${resetPasswordToken}`,
+          },
+        });
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    resetPassword: async (resetPasswordToken: string, resetPasswordData: IResetPasswordData) => {
+      try {
+        await axiosInstance.post(`${baseUrl}/auth/reset-password`, resetPasswordData, {
+          headers: {
+            'Authorization': `Bearer ${resetPasswordToken}`,
+          },
+        });
         return true;
       } catch (error) {
         return false;
