@@ -20,7 +20,7 @@ interface AuthorPageProps {
 }
 
 const AuthorPage = ({ author }: AuthorPageProps) => {
-  const authorImage = author.image || '';
+  const authorImage = author.image || '/default-author.jpg';
 
   return (
     <MainLayout>
@@ -45,10 +45,11 @@ const AuthorPage = ({ author }: AuthorPageProps) => {
         <div className="row mt-4">
           {author.works.map((work) => {
             const book = work.books[0];
+            const bookCover = book.cover || '/default-book.jpg';
             return (
               <div className="col-2" key={book.id}>
                 <Link href={`/book/${book.id}`} title={book.title}>
-                  <img src={book.cover || ''} alt={book.title} className="img-fluid" />
+                  <img src={bookCover} alt={book.title} className="img-fluid" />
                 </Link>
               </div>
             );

@@ -21,7 +21,7 @@ interface BookPageProps {
 
 const BookPage = ({ book }: BookPageProps) => {
   const description = book.description || book.work.description;
-  const cover = book.cover || '';
+  const cover = book.cover || '/default-book.jpg';
 
   const hasOtherEditions = book.work.books?.length > 0;
 

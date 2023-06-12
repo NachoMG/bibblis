@@ -32,7 +32,7 @@ const IsbnSearchBox = () => {
     <Link href={`/book/${option.id}`}>
       <div className="row">
         <div className="col-3">
-          <img src={option.cover} alt={option.title} width="100%" />
+          <img src={option.cover || '/default-book.jpg'} alt={option.title} width="100%" />
         </div>
         <div className="col-9">
           {option.title}
