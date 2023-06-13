@@ -88,7 +88,7 @@ const SignUp = () => {
   return (
     <MainLayout>
       <Head>
-        <title>Regístrate | Biblis</title>
+        <title>Regístrate | Bibblis</title>
         <meta
           name="description"
           content="

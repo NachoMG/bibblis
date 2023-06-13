@@ -16,6 +16,13 @@ export class BookService {
     private workService: WorkService,
   ) {}
 
+  findMany({ limit, sort }) {
+    return this.prismaService.book.findMany({
+      take: limit,
+      orderBy: sort,
+    });
+  }
+
   findByIdentifier(value: string, identifierName: string) {
     return this.prismaService.book.findFirst({
       where: {

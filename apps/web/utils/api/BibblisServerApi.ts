@@ -28,6 +28,14 @@ const BibblisServerApi = (() => {
         return false;
       }
     },
+    getLatestBooks: async () => {
+      try {
+        const res = await axiosInstance.get(`${baseUrl}/book/latest`);
+        return res.data;
+      } catch (error) {
+        return false;
+      }
+    },
   };
 })();
 

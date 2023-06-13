@@ -6,7 +6,7 @@ const TermsAndConditionsPage = () => {
   return (
     <MainLayout>
       <Head>
-        <title>Cookies | Biblis</title>
+        <title>Cookies | Bibblis</title>
         <meta
           name="description"
           content="Información sobre la política de cookies"

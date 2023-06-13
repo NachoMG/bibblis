@@ -47,7 +47,7 @@ const ForgotPassword = () => {
   return (
     <MainLayout>
       <Head>
-        <title>Recuperar contraseña | Biblis</title>
+        <title>Recuperar contraseña | Bibblis</title>
         <meta
           name="description"
           content="¿Has olvidado tu contraseña? Introduce tu email y modifícala por una nueva"

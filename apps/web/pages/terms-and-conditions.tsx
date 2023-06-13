@@ -7,7 +7,7 @@ const TermsAndConditionsPage = () => {
   return (
     <MainLayout>
       <Head>
-        <title>Términos y condiciones | Biblis</title>
+        <title>Términos y condiciones | Bibblis</title>
         <meta
           name="description"
           content="

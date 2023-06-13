@@ -38,7 +38,7 @@ const ResetPassword = () => {
   return (
     <MainLayout>
       <Head>
-        <title>Modificar contraseña | Biblis</title>
+        <title>Modificar contraseña | Bibblis</title>
       </Head>
       <div className="row mb-5">
         <div className="col">

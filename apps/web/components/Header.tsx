@@ -35,7 +35,7 @@ const Header = () => {
           <>
             <div className="d-none d-md-block col-auto px-0">
               <Link href="/my-library" className="btn btn-secondary">
-                Mi librería
+                Mi biblioteca
               </Link>
             </div>
             <div className="d-none d-md-block col-auto">
@@ -64,7 +64,7 @@ const Header = () => {
           <>
             <div className="col-6">
               <Link href="/my-library" className="btn btn-secondary w-100">
-                Mi librería
+                Mi biblioteca
               </Link>
             </div>
             <div className="col-6">

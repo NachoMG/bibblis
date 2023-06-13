@@ -52,7 +52,7 @@ const SignIn = () => {
   return (
     <MainLayout>
       <Head>
-        <title>Inicia sesión | Biblis</title>
+        <title>Inicia sesión | Bibblis</title>
         <meta
           name="description"
           content="¡Inicia sesión y empieza a organizar tu biblioteca 📚!"
