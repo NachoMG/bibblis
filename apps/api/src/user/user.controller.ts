@@ -23,6 +23,18 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('Access Token')
+  @ApiOperation({ summary: 'Return all user books' })
+  @ApiResponse({ status: 200, description: 'Books returned' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @Get('/me/book')
+  getUserBooks(@Req() req: IRequestWithDefaultTokenPayloadWithToken) {
+    return this.userService.getUserBooks({
+      userId: req.user.sub,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('Access Token')
   @ApiOperation({ summary: 'Finds a book in the logged user collection' })
   @ApiResponse({ status: 200, description: 'Book found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })

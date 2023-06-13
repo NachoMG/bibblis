@@ -137,26 +137,34 @@ const BibblisClientApi = (() => {
         return false;
       }
     },
+    getUserBooks: async () => {
+      try {
+        const res = await axiosInstance.get(`${baseUrl}/user/me/book`);
+        return res.data;
+      } catch (error) {
+        return [];
+      }
+    },
     getUserBook: async (bookId: string) => {
       try {
-        const book = await axiosInstance.get(`${baseUrl}/user/me/book/${bookId}`);
-        return book;
+        const res = await axiosInstance.get(`${baseUrl}/user/me/book/${bookId}`);
+        return res.data;
       } catch (error) {
         return false;
       }
     },
     addUserBook: async (bookId: string) => {
       try {
-        const book = await axiosInstance.post(`${baseUrl}/user/me/book`, { bookId });
-        return book;
+        const res = await axiosInstance.post(`${baseUrl}/user/me/book`, { bookId });
+        return res.data;
       } catch (error) {
         return false;
       }
     },
     removeUserBook: async (bookId: string) => {
       try {
-        const book = await axiosInstance.delete(`${baseUrl}/user/me/book/${bookId}`);
-        return book;
+        const res = await axiosInstance.delete(`${baseUrl}/user/me/book/${bookId}`);
+        return res.data;
       } catch (error) {
         return false;
       }

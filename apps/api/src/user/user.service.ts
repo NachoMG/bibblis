@@ -25,6 +25,13 @@ export class UserService {
     return this.prismaService.user.update(update);
   }
 
+  async getUserBooks({ userId }) {
+    return this.prismaService.userBook.findMany({
+      where: { userId },
+      include: { book: true },
+    });
+  }
+
   async getUserBook({ userId, bookId }: { userId: string, bookId: string }) {
     const userBook = await this.userBookService.findOne({
       userId_bookId: {
