@@ -6,6 +6,7 @@ COPY dist/apps/api/package*.json ./
 COPY prisma ./prisma/
 
 RUN npm install
+RUN npx prisma generate
 
 FROM node:18-alpine as runner
 

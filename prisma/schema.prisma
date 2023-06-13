@@ -8,10 +8,6 @@ generator client {
   previewFeatures = ["extendedWhereUnique"]
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-}
-
 model User {
   id                String             @id @default(uuid())
   email             String             @unique @db.VarChar(255)
