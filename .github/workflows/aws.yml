@@ -42,6 +42,8 @@ jobs:
         run: npm ci
       - name: Build project
         run: npx nx build api
+      - name: Build project
+        run: npx prisma generate
       - name: Build Docker image
         run: |
           docker build -f apps/api/Dockerfile . -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.API_ECR_REPOSITORY }}:latest
