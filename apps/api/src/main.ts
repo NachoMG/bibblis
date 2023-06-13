@@ -27,7 +27,7 @@ async function bootstrap() {
       'Confirm email token'
     )
     .setTitle('Libbuk')
-    .setVersion('0.1')
+    .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
