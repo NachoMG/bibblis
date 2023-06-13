@@ -78,6 +78,7 @@ const MyLibrary = () => {
 export default MyLibrary;
 
 export const getServerSideProps = (context: GetServerSidePropsContext) => {
+  console.log(context.req.headers);
   if (!context.req.headers.cookie?.startsWith('refresh')) {
     return {
       redirect: {
