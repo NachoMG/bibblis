@@ -13,6 +13,7 @@ import BibblisClientApi from '../../utils/api/BibblisClientApi';
 import BibblisServerApi from '../../utils/api/BibblisServerApi';
 import MainLayout from '../../layouts/MainLayout';
 import Mosaic from '../../components/Mosaic';
+import Head from 'next/head';
 
 interface BookPageProps {
   book: Book & {
@@ -78,8 +79,32 @@ const BookPage = ({ book }: BookPageProps) => {
 
   return (
     <MainLayout>
+      <Head>
+        <title>{book.title} | Bibblis</title>
+        <meta
+          name="description"
+          content={
+            `Añade ${book.title} a tu biblioteca y empieza a disfrutar de Bibblis`
+          }
+        />
+      </Head>
       <div className="row mt-5">
-        <div className="col-3">
+        <div className="col-12 mb-3 d-md-none">
+          <h1>{book.title}</h1>
+          <p className="h3">
+            Por
+            {book.work.authors.map((author, index: number) => (
+              <span key={author.id}>
+                { index !== 0 && ','}
+                {' '}
+                <Link href={`/author/${author.id}`}>
+                  {author.name}
+                </Link>
+              </span>
+            ))}
+          </p>
+        </div>
+        <div className="col-12 col-md-3 text-center">
           <img src={cover} alt={book.title} className="img-fluid" />
           {showBookButton &&
             <div className="mt-2">
@@ -120,20 +145,22 @@ const BookPage = ({ book }: BookPageProps) => {
             }
           </div>
         </div>
-        <div className="col-9">
-          <h1>{book.title}</h1>
-          <p className="h3">
-            Por
-            {book.work.authors.map((author, index: number) => (
-              <span key={author.id}>
-                { index !== 0 && ','}
-                {' '}
-                <Link href={`/author/${author.id}`}>
-                  {author.name}
-                </Link>
-              </span>
-            ))}
-          </p>
+        <div className="col-12 col-md-9">
+          <div className="d-none d-md-block">
+            <h1>{book.title}</h1>
+            <p className="h3">
+              Por
+              {book.work.authors.map((author, index: number) => (
+                <span key={author.id}>
+                  { index !== 0 && ','}
+                  {' '}
+                  <Link href={`/author/${author.id}`}>
+                    {author.name}
+                  </Link>
+                </span>
+              ))}
+            </p>
+          </div>
           <ReactMarkdown className="mt-4">
             {description}
           </ReactMarkdown>

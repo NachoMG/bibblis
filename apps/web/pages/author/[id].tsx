@@ -6,6 +6,7 @@ import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import BibblisServerApi from '../../utils/api/BibblisServerApi';
 import MainLayout from '../../layouts/MainLayout';
 import Mosaic from '../../components/Mosaic';
+import Head from 'next/head';
 
 interface AuthorPageProps {
   author: Author & {
@@ -35,15 +36,32 @@ const AuthorPage = ({ author }: AuthorPageProps) => {
 
   return (
     <MainLayout>
+      <Head>
+        <title>{author.name} | Bibblis</title>
+        <meta
+          name="description"
+          content={
+            `¡Descubre los mejores libros de ${author.name} y añádelos a tu biblioteca para empezar a disfrutar de Bibblis!`
+          }
+        />
+      </Head>
       <div className="row mt-5">
-        <div className="col-3">
-          <img src={authorImage} alt={author.name} className="img-fluid" />
-        </div>
-        <div className="col-9">
+        <div className="col-12 mb-3 d-md-none">
           <h1>{author.name}</h1>
           {author.birthDate &&
             <h3>{author.birthDate}</h3>
           }
+        </div>
+        <div className="col-12 col-md-3 text-center">
+          <img src={authorImage} alt={author.name} className="img-fluid" />
+        </div>
+        <div className="col-12 col-md-9">
+          <div className="d-none d-md-block">
+            <h1>{author.name}</h1>
+            {author.birthDate &&
+              <h3>{author.birthDate}</h3>
+            }
+          </div>
           {author.bio &&
             <ReactMarkdown className="mt-4">
               {author.bio}
