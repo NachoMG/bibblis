@@ -147,8 +147,8 @@ const BibblisClientApi = (() => {
     },
     getUserBook: async (bookId: string) => {
       try {
-        const res = await axiosInstance.get(`${baseUrl}/user/me/book/${bookId}`);
-        return res.data;
+        await axiosInstance.get(`${baseUrl}/user/me/book/${bookId}`);
+        return true;
       } catch (error) {
         return false;
       }
