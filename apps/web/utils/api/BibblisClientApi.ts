@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestHeaders } from 'axios';
 
 import { ISignInData } from '../../types/i-sign-in-data';
 import { ISignInResData } from '../../types/i-sign-in-res-data';
@@ -13,10 +13,46 @@ const BibblisClientApi = (() => {
   const baseHost = isProd && 'https://bibblis.com' || 'http://localhost:3000';
 
   const baseUrl = `${baseHost}/api`;
+  axios.defaults.withCredentials = true
   const axiosInstance = axios.create();
 
-  // TODO add always acces_token to the request and retry the request refreshing
-  // the token
+  // access token is added to all requests if exists.
+  axiosInstance.interceptors.request.use(async (config) => {
+    const accessToken = AccessToken.get();
+    if (accessToken) {
+      config.headers = {
+        ...config.headers,
+        Authorization: `Bearer ${accessToken}`
+      } as AxiosRequestHeaders;
+    }
+    return config;
+  });
+
+  // If response have an error code 401 Unauthorized and the access token
+  // exists, it tries to refresh the token and resend the original request.
+  axiosInstance.interceptors.response.use(
+    (response) => {
+      return response
+    },
+    async (error) => {
+      const originalRequest = error.config;
+      const accessToken = AccessToken.get();
+      if (
+        error.response.status === 401 && accessToken && !originalRequest._retry
+      ) {
+        originalRequest._retry = true;
+        try {
+          const { access_token }: { access_token: string } = await axios.post(`${baseUrl}/refresh`);
+          AccessToken.set(access_token);
+          originalRequest.headers.Authorization = `Bearer ${access_token}`;
+        } catch (e) {
+          return Promise.reject(error);
+        }
+        return axios(originalRequest);
+      }
+      return Promise.reject(error);
+    }
+  );
 
   return {
     searchBook: async (bookId: string) => {
@@ -29,7 +65,8 @@ const BibblisClientApi = (() => {
     },
     signUp: async (signUpData: ISignUpData) => {
       try {
-        await axiosInstance.post(`${baseUrl}/auth/sign-up`, signUpData);
+        const response = await axiosInstance.post(`${baseUrl}/auth/sign-up`, signUpData);
+        AccessToken.set(response.data.access_token);
         return { error: false, status: 200 };
       } catch (error) {
         return {
@@ -86,6 +123,14 @@ const BibblisClientApi = (() => {
             'Authorization': `Bearer ${resetPasswordToken}`,
           },
         });
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    signOut: async () => {
+      try {
+        await axiosInstance.post(`${baseUrl}/auth/sign-out`);
         return true;
       } catch (error) {
         return false;
