@@ -1,0 +1,20 @@
+.mosaic {
+  columns: 3;
+  column-gap: 5px;
+  @include media-breakpoint-up(md) {
+    columns: 4;
+  }
+  @include media-breakpoint-up(lg) {
+    columns: 5;
+  }
+  @include media-breakpoint-up(xl) {
+    columns: 6;
+  }
+  .mosaic-item {
+    width: 100%;
+    margin-bottom: 5px;
+    break-inside: avoid;
+    border: 1px solid black;
+    img { width: 100% }
+  }
+}

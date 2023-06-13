@@ -1,11 +1,11 @@
 import { GetServerSidePropsContext } from 'next';
-import Link from 'next/link';
 
 import { Author } from '@prisma/client'; 
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 
 import BibblisServerApi from '../../utils/api/BibblisServerApi';
 import MainLayout from '../../layouts/MainLayout';
+import Mosaic from '../../components/Mosaic';
 
 interface AuthorPageProps {
   author: Author & {
@@ -21,6 +21,17 @@ interface AuthorPageProps {
 
 const AuthorPage = ({ author }: AuthorPageProps) => {
   const authorImage = author.image || '/default-author.jpg';
+  const mosaicItems = author.works.map((work) => {
+    const book = work.books[0];
+    const bookCover = book.cover || '/default-book.jpg';
+
+    return {
+      id: book.id,
+      title: book.title,
+      href: `/book/${book.id}`,
+      src: bookCover,
+    };
+  });
 
   return (
     <MainLayout>
@@ -39,21 +50,15 @@ const AuthorPage = ({ author }: AuthorPageProps) => {
             </ReactMarkdown>
           }
         </div>
-        <h2 className="mt-5">
-          Obras
-        </h2>
-        <div className="row mt-4">
-          {author.works.map((work) => {
-            const book = work.books[0];
-            const bookCover = book.cover || '/default-book.jpg';
-            return (
-              <div className="col-2" key={book.id}>
-                <Link href={`/book/${book.id}`} title={book.title}>
-                  <img src={bookCover} alt={book.title} className="img-fluid" />
-                </Link>
-              </div>
-            );
-          })}
+      </div>
+      <div className="row mt-5">
+          <div className="col">
+            <h2>Obras</h2>
+          </div>
+      </div>
+      <div className="row mt-4">
+        <div className="col">
+          <Mosaic items={mosaicItems} />
         </div>
       </div>
     </MainLayout>

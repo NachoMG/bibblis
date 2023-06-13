@@ -1,10 +1,14 @@
 import { GetServerSidePropsContext } from 'next';
+
 import Link from 'next/link';
+
 import { Book } from '@prisma/client';
+
 import ReactMarkdown from 'react-markdown'
 
-import MainLayout from '../../layouts/MainLayout';
 import BibblisServerApi from '../../utils/api/BibblisServerApi';
+import MainLayout from '../../layouts/MainLayout';
+import Mosaic from '../../components/Mosaic';
 
 interface BookPageProps {
   book: Book & {
@@ -22,8 +26,14 @@ interface BookPageProps {
 const BookPage = ({ book }: BookPageProps) => {
   const description = book.description || book.work.description;
   const cover = book.cover || '/default-book.jpg';
+  const mosaicItems = (book.work.books || []).map((book) => ({
+    id: book.id,
+    title: book.title,
+    href: `/book/${book.id}`,
+    src: book.cover || '/default-book.jpg',
+  }));
 
-  const hasOtherEditions = book.work.books?.length > 0;
+  const hasOtherEditions = mosaicItems.length > 0;
 
   return (
     <MainLayout>
@@ -53,22 +63,22 @@ const BookPage = ({ book }: BookPageProps) => {
           <ReactMarkdown className="mt-4">
             {description}
           </ReactMarkdown>
-          { hasOtherEditions &&
-            <>
-              <h3 className="mt-5">Otras ediciones</h3>
-              <div className="row mt-4">
-                {book.work.books.map((book, index) => (
-                  <div className="col-2" key={book.id}>
-                    <Link href={`/book/${book.id}`} title={book.title}>
-                      <img src={book.cover || ''} alt={book.title} className="img-fluid" />
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </>
-          }
         </div>
       </div>
+      {hasOtherEditions &&
+        <>
+          <div className="row mt-5">
+            <div className="col">
+              <h2>Otras ediciones</h2>
+            </div>
+          </div>
+          <div className="row mt-4">
+            <div className="col">
+              <Mosaic items={mosaicItems} />
+            </div>
+          </div>
+        </>
+      }
     </MainLayout>
   );
 };
