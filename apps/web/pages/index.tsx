@@ -18,8 +18,6 @@ const Index = ({ latestBooks }: IndexPageProps) => {
     src: book.cover || '/default-book.jpg',
   }));
 
-  const hasOtherEditions = mosaicItems.length > 0;
-
   return (
     <MainLayout>
       <Head>
