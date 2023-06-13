@@ -25,6 +25,7 @@ model User {
   acceptedMarketing Boolean
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
+  books             UserBook[]
   refreshTokens     RefreshToken[]
   emailVerification EmailVerification?
   passwordResets    PasswordReset[]
@@ -105,6 +106,7 @@ model Book {
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
   work        Work             @relation(fields: [workId], references: [id])
+  UserBook    UserBook[]
 }
 
 model BookIdentifier {
@@ -124,4 +126,16 @@ model BookIdentifierType {
   id             Int              @id @default(autoincrement())
   name           String           @unique
   BookIdentifier BookIdentifier[]
+}
+
+model UserBook {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  bookId    String
+  user      User     @relation(fields: [userId], references: [id])
+  book      Book     @relation(fields: [bookId], references: [id])
+
+  @@unique([userId, bookId])
 }

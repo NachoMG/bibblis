@@ -1,9 +1,10 @@
 import { Controller, Get, Param } from '@nestjs/common';
 
 import { AuthorService } from './author.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetAuthorPageDataDto } from './dto/get-author-page-data-dto';
 
+@ApiTags('Author')
 @Controller('author')
 export class AuthorController {
   constructor(private authorService: AuthorService) {}

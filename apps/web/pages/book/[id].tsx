@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { GetServerSidePropsContext } from 'next';
 
 import Link from 'next/link';
@@ -6,6 +8,8 @@ import { Book } from '@prisma/client';
 
 import ReactMarkdown from 'react-markdown'
 
+import AccessToken from '../../utils/AccessToken';
+import BibblisClientApi from '../../utils/api/BibblisClientApi';
 import BibblisServerApi from '../../utils/api/BibblisServerApi';
 import MainLayout from '../../layouts/MainLayout';
 import Mosaic from '../../components/Mosaic';
@@ -35,15 +39,85 @@ const BookPage = ({ book }: BookPageProps) => {
 
   const hasOtherEditions = mosaicItems.length > 0;
 
+  const [showBookButton, setShowBookButton] = useState(false);
+  const [hasBook, setHasBook] = useState(false);
+  const [disabledButton, setDisabledButton] = useState(false);
+
+  useEffect(() => {
+    setShowBookButton(false);
+    setHasBook(false);
+    setDisabledButton(false);
+    const loggedIn = !!AccessToken.get();
+    if (loggedIn) {
+      BibblisClientApi.getUserBook(book.id).then((res) => {
+        if (res) {
+          setHasBook(true);
+        }
+        setShowBookButton(true);
+      });
+    }
+  }, [book.id]);
+
+  const addBook = async () => {
+    setDisabledButton(true);
+    const result = await BibblisClientApi.addUserBook(book.id);
+    if (result) {
+      setHasBook(true);
+    }
+    setDisabledButton(false);
+  }
+
+  const removeBook = async () => {
+    setDisabledButton(true);
+    const result = await BibblisClientApi.removeUserBook(book.id);
+    if (result) {
+      setHasBook(false);
+    }
+    setDisabledButton(false);
+  }
+
   return (
     <MainLayout>
       <div className="row mt-5">
         <div className="col-3">
           <img src={cover} alt={book.title} className="img-fluid" />
-          <div className="mt-4">
-            { book.pages && <p className="my-1"><b>Páginas</b> <span>{book.pages}</span></p> }
-            { book.publisher && <p className="my-1"><b>Editorial</b> <span>{book.publisher}</span></p> }
-            { book.publishedAt && <p className="my-1"><b>Fecha de publicación</b> <span>{book.publishedAt}</span></p> }
+          {showBookButton &&
+            <div className="mt-2">
+              {hasBook &&
+                <button
+                  className="btn btn-secondary w-100"
+                  onClick={removeBook}
+                  disabled={disabledButton}
+                >
+                  Eliminar libro
+                </button>
+              ||
+                <button
+                  className="btn btn-primary w-100"
+                  onClick={addBook}
+                  disabled={disabledButton}
+                >
+                  Añadir libro
+                </button>
+              }
+            </div>
+          }
+          <div className="mt-3">
+            {book.pages &&
+              <p className="my-1">
+                <b>Páginas</b> <span>{book.pages}</span>
+              </p>
+            }
+            {book.publisher &&
+              <p className="my-1">
+                <b>Editorial</b> <span>{book.publisher}</span>
+              </p>
+            }
+            {book.publishedAt &&
+              <p className="my-1">
+                <b>Fecha de publicación</b> <span>{book.publishedAt}</span>
+              </p>
+            }
           </div>
         </div>
         <div className="col-9">

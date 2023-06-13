@@ -1,10 +1,11 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { BookService } from './book.service';
 import { SearchByIsbnDto } from './dto/search-by-isbn.dto';
 import { GetBookPagaDataDto } from './dto/get-book-page-data-dto';
 
+@ApiTags('Book')
 @Controller('book')
 export class BookController {
   constructor(private bookService: BookService) {}

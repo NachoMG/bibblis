@@ -32,7 +32,10 @@ import { UserModule } from '../user/user.module';
         options: { strict: true },
       },
     }),
-    UserModule, AuthModule, BookModule, AuthorModule,
+    AuthModule,
+    AuthorModule,
+    BookModule,
+    UserModule,
   ],
 })
 export class AppModule {}

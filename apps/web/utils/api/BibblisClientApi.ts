@@ -42,7 +42,8 @@ const BibblisClientApi = (() => {
       ) {
         originalRequest._retry = true;
         try {
-          const { access_token }: { access_token: string } = await axios.post(`${baseUrl}/refresh`);
+          const res = await axios.post(`${baseUrl}/auth/refresh`);
+          const access_token = res.data.access_token;
           AccessToken.set(access_token);
           originalRequest.headers.Authorization = `Bearer ${access_token}`;
         } catch (e) {
@@ -132,6 +133,30 @@ const BibblisClientApi = (() => {
       try {
         await axiosInstance.post(`${baseUrl}/auth/sign-out`);
         return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    getUserBook: async (bookId: string) => {
+      try {
+        const book = await axiosInstance.get(`${baseUrl}/user/me/book/${bookId}`);
+        return book;
+      } catch (error) {
+        return false;
+      }
+    },
+    addUserBook: async (bookId: string) => {
+      try {
+        const book = await axiosInstance.post(`${baseUrl}/user/me/book`, { bookId });
+        return book;
+      } catch (error) {
+        return false;
+      }
+    },
+    removeUserBook: async (bookId: string) => {
+      try {
+        const book = await axiosInstance.delete(`${baseUrl}/user/me/book/${bookId}`);
+        return book;
       } catch (error) {
         return false;
       }
