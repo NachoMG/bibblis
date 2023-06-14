@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer className="row bg-primary px-2 px-md-5 py-4 mt-auto">
+    <footer className="row bg-primary px-2 px-md-5 py-4 mt-auto mx-0">
       <div className="col d-none d-md-block">
         <b>Bibblis 2023</b>
         {' '}| <Link href="/terms-and-conditions">Términos y condiciones</Link>
